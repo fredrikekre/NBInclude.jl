@@ -12,7 +12,7 @@ the value of the last evaluated expression is returned.
 """
 module NBInclude
 
-using Compat, JSON
+using Compat, Compat.Distributed, JSON
 export nbinclude
 
 """
@@ -87,7 +87,7 @@ function nbinclude(path::AbstractString; renumber::Bool=false,
         nprocs()>1 && sleep(0.005)
         open(JSON.parse, path, "r")
     else
-        JSON.parse(remotecall_fetch(readstring, 1, path))
+        JSON.parse(remotecall_fetch(f -> read(f, String), 1, path))
     end
 
     # check for an acceptable notebook:
@@ -104,11 +104,11 @@ function nbinclude(path::AbstractString; renumber::Bool=false,
             s = join(cell["source"])
             isempty(strip(s)) && continue # Jupyter doesn't number empty cells
             counter += 1
-            ismatch(shell_or_help, s) && continue
+            contains(s, shell_or_help) && continue
             cellnum = renumber ? string(counter) :
                       cell["execution_count"] == nothing ? string('+',counter) :
                       string(cell["execution_count"])
-            counter in counters && ismatch(regex, s) || continue
+            counter in counters && contains(s, regex) || continue
             ret = my_include_string(s, string(path, ":In[", cellnum, "]"), prev)
             anshook(ret)
         end

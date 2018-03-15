@@ -21,7 +21,7 @@ and nested inclusions can use paths relative to the notebook, just as for `inclu
 `+N` for the `N`-th nonempty cell in the notebook.  You can use `nbinclude("myfile.ipynb", renumber=true)` to automatically renumber the cells in sequence (as if you had selected *Run All* from the Jupyter *Cell* menu), without altering the file.
 * The Julia `@__FILE__` macro returns `/path/to/myfile.ipynb:In[N]` for input cell `N`.
 * Like `include`, `nbinclude` works fine with parallel Julia processes, even for
-worker processes (from Julia's [`addprocs`](http://docs.julialang.org/en/latest/stdlib/parallel/#Base.addprocs)) that may not have filesystem access.
+worker processes (from Julia's [`addprocs`](https://docs.julialang.org/en/latest/stdlib/Distributed/#Distributed.addprocs)) that may not have filesystem access.
 (Do `import NBInclude; @everywhere using NBInclude` to use `nbinclude` on
 all processes.)
 * In IJulia, cells beginning with `;` or `?` are interpreted as shell commands or help requests, respectively.  Such cells are ignored by `nbinclude`.

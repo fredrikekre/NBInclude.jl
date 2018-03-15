@@ -1,4 +1,4 @@
-using Base.Test, Compat
+using Compat, Compat.Test, Compat.Distributed
 
 addprocs(1)
 
